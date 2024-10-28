@@ -1,88 +1,51 @@
 class CategoryModel {
-  String? id;
-  String? name;
-  String? urlHandle;
-  String? shortDescription;
-  String? featuredImageUrl;
-  List<Items>? items;
+  int? id;
+  String? categoryQroupTitle;
+  List<CategoryList>? categoryList;
 
-  CategoryModel(
-      {this.id,
-        this.name,
-        this.urlHandle,
-        this.shortDescription,
-        this.featuredImageUrl,
-        this.items});
+  CategoryModel({this.id, this.categoryQroupTitle, this.categoryList});
 
   CategoryModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    urlHandle = json['urlHandle'];
-    shortDescription = json['shortDescription'];
-    featuredImageUrl = json['featuredImageUrl'];
-    if (json['items'] != null) {
-      items = <Items>[];
-      json['items'].forEach((v) {
-        items!.add(new Items.fromJson(v));
+    categoryQroupTitle = json['category_qroup_title'] ?? "error";
+    if (json['category_list'] != null) {
+      categoryList = <CategoryList>[];
+      json['category_list'].forEach((v) {
+        categoryList!.add(new CategoryList.fromJson(v));
       });
     }
   }
 
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['id'] = this.id;
-  //   data['name'] = this.name;
-  //   data['urlHandle'] = this.urlHandle;
-  //   data['shortDescription'] = this.shortDescription;
-  //   data['featuredImageUrl'] = this.featuredImageUrl;
-  //   if (this.items != null) {
-  //     data['items'] = this.items!.map((v) => v.toJson()).toList();
-  //   }
-  //   return data;
-  // }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['category_qroup_title'] = this.categoryQroupTitle;
+    if (this.categoryList != null) {
+      data['category_list'] =
+          this.categoryList!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
-class Items {
-  String? id;
-  String? title;
-  String? shortDescription;
-  String? featuredImageUrl;
-  String? urlHandle;
-  double? price;
-  String? publishedDate;
-  int? quantity;
-  double? discount;
-  Items(
-      {this.id,
-        this.title,
-        this.shortDescription,
-        this.featuredImageUrl,
-        this.urlHandle,
-        this.price,
-        this.publishedDate,
-        this.quantity,
-        this.discount});
+class CategoryList {
+  int? id;
+  String? categoryTitle;
+  String? categoryGroupName;
 
-  Items.fromJson(Map<String, dynamic> json) {
+  CategoryList({this.id, this.categoryTitle, this.categoryGroupName});
+
+  CategoryList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    title = json['title'];
-    shortDescription = json['shortDescription'];
-    featuredImageUrl = json['featuredImageUrl'];
-    urlHandle = json['urlHandle'];
-    price = json['price'];
-    publishedDate = json['publishedDate'];
-    quantity = json['quantity'];
-    discount = json['discount'];
+    categoryTitle = json['category_title'];
+    categoryGroupName = json['category_group_name'] ?? "errr";
   }
 
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['id'] = this.id;
-  //   data['title'] = this.title;
-  //   data['shortDescription'] = this.shortDescription;
-  //   data['featuredImageUrl'] = this.featuredImageUrl;
-  //   data['urlHandle'] = this.urlHandle;
-  //   data['publishedDate'] = this.publishedDate;
-  //   return data;
-  // }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['category_title'] = this.categoryTitle;
+    data['category_group_name'] = this.categoryGroupName;
+    return data;
+  }
 }

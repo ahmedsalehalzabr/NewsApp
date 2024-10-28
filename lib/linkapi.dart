@@ -1,8 +1,8 @@
 class AppLink {
 
-  static const String server = "https://10.0.2.2:7055/api/";
+  static const String server = "https://api-magazine.investinyemen.org/ar/api/v1/category-group";
 //
-
+  static const String categoryId = "https://api-magazine.investinyemen.org/ar/api/v1/single-category/";
 
   static const String signUp = "https://api-magazine.investinyemen.org/";
 
@@ -14,7 +14,7 @@ class ApiEndPoints {
 }
 
 class _AuthEndPoints {
-  final String registerEmail = 'Auth/register';
+  final String registerEmail = 'https://';
   final String loginEmail = 'Auth/login';
   final String homePage = 'Category';
   final String product = 'Item';

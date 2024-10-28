@@ -9,7 +9,7 @@ class CategoryServices{
   static var client = http.Client();
   static Future<List<CategoryModel>?> getCategory() async{
 
-    var response = await client.get(Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.homePage));
+    var response = await client.get(Uri.parse(AppLink.server));
     if(response.statusCode == 200)
     {
       var convertedJosnData = jsonDecode(response.body);
