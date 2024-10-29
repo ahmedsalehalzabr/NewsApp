@@ -5,6 +5,7 @@ import 'package:awesome_rating/awesome_rating.dart';
 
 import 'package:flutter/material.dart';
 import 'package:posts/controller/product_controller.dart';
+import 'package:posts/linkapi.dart';
 import 'package:posts/models/product_model.dart';
 import 'package:posts/view/screen/product_details_screen.dart';
 import 'package:get/get.dart';
@@ -47,6 +48,7 @@ class SearchScreen extends StatelessWidget {
               mainAxisExtent: 272,
             ),
             itemBuilder: (context, index) {
+            final  oo = controller.productList[index];
               if (controller.searchList.isEmpty) {
                 return buildCardItems(
                     image: controller.productList[index].postList![index].imageUrl.toString(),
@@ -172,7 +174,7 @@ class SearchScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10), // لاحتواء الصورة ضمن الحواف المدورة
                   child: Image.network(
-                    image,
+                    AppLink.signUp + image,
                     fit: BoxFit.fill, // ضبط حجم الصورة لتناسب الحاوية
                   ),
                 ),
@@ -190,27 +192,27 @@ class SearchScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: 3,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const  AwesomeStarRating(
-
-                            color: Colors.orange,
-                            borderColor: Colors.orange,
-                            starCount: 5,
-                            spacing: 1,
-                            size: 12,
-                            allowHalfRating: true,
-
-                          ),
-
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(
+                    //     right: 3,
+                    //   ),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    //     children: [
+                    //       const  AwesomeStarRating(
+                    //
+                    //         color: Colors.orange,
+                    //         borderColor: Colors.orange,
+                    //         starCount: 5,
+                    //         spacing: 1,
+                    //         size: 12,
+                    //         allowHalfRating: true,
+                    //
+                    //       ),
+                    //
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

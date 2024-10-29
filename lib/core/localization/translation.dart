@@ -45,7 +45,7 @@ class MyTranslation extends Translations {
           "37": "تهانينا",
           "38": "تم التسجيل بنجاح",
           "39": "الاقسام",
-          "40": "كل المنتجات",
+          "40": "كل الاخبار",
           "41": "",
           "42": "",
         },
@@ -93,7 +93,7 @@ class MyTranslation extends Translations {
           "37": "congratulations",
           "38": "successfully registered",
           "39": "Categories",
-          "40": "All Products",
+          "40": "All News",
           "41": "",
           "42": "",
 

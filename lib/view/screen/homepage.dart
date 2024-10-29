@@ -12,6 +12,7 @@ import 'package:posts/view/screen/widget/item/customsladeritem.dart';
 
 import 'package:get/get.dart';
 
+import 'search_screen.dart';
 import 'widget/home/SearchFormText.dart';
 
 
@@ -75,8 +76,8 @@ class HomePage extends StatelessWidget {
                                   children: [
 
                                     SearchFormText(),
-                                    // SizedBox(height: 5.h,),
-                                    // CardSearch(),
+                                    SizedBox(height: 5),
+                                    SearchScreen(),
                                   ],
                                 ),
                               ),
@@ -145,13 +146,20 @@ class HomePage extends StatelessWidget {
                           return Container(
                             margin: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(AppLink.signUp + controllers.productList[0].postList![index].imageUrl.toString()),
+                              image: controllers.productList.isNotEmpty &&
+                                  controllers.productList[0].postList != null &&
+                                  controllers.productList[0].postList!.isNotEmpty &&
+                                  index < controllers.productList[0].postList!.length
+                                  ? DecorationImage(
+                                image: NetworkImage(AppLink.signUp +
+                                    controllers.productList[0].postList![index].imageUrl.toString()),
                                 fit: BoxFit.fill,
-                              ),
+                              )
+                                  : null, // أو يمكنك إضافة صورة بديلة هنا
                               borderRadius: BorderRadius.circular(10),
                             ),
                           );
+
                         },
                       ),
                     ),
