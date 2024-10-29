@@ -8,16 +8,18 @@ import 'package:get/get.dart';
 
 import 'core/constant/routes.dart';
 import 'core/middleware/mymiddleware.dart';
+import 'view/screen/category_page.dart';
 
 
 List<GetPage<dynamic>>? routes = [
   GetPage(name: "/", page: () => const Language() , middlewares: [
-MyMiddleWare() 
-]),
+    MyMiddleWare()
+  ]),
 
   GetPage(name: AppRoute.homepage, page: () => const HomeScreen()),
 
  GetPage(name: AppRoute.searchScreen, page: () =>  SearchScreen()),
+  GetPage(name: AppRoute.categorypage, page: () =>  CategoryPage()),
  // GetPage(name: AppRoute.favoriteScreen, page: () =>  FavoriteScreen()),
 
   //GetPage(name: AppRoute.offers, page: () => const Offers()),

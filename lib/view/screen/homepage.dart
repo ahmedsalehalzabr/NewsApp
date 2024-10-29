@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:posts/controller/home_controller.dart';
 import 'package:posts/controller/product_controller.dart';
+import 'package:posts/core/constant/routes.dart';
 import 'package:posts/linkapi.dart';
 import 'package:posts/view/screen/widget/drawer.dart';
 import 'package:posts/view/screen/widget/home/customappbar.dart';
@@ -47,7 +48,7 @@ class HomePage extends StatelessWidget {
                 ),
                 title: IconButton(
                   onPressed: () {
-                  //  Get.offNamed(Routes.homeScreen);
+                    Get.offNamed(AppRoute.categorypage);
                   },
                   icon: Image.asset(
                     'assets/images/logo.png',

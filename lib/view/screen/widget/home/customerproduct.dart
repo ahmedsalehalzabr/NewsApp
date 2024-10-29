@@ -67,7 +67,7 @@ class ListProductHome extends StatelessWidget {
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
-                              maxLines: 5, // تحديد عدد الأسطر القصوى
+                              maxLines: 4, // تحديد عدد الأسطر القصوى
                               overflow: TextOverflow.ellipsis, // للتأكد من النص الطويل لا يتعدى المنطقة المخصصة
                             ),
                           ],
