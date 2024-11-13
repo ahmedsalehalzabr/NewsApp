@@ -50,7 +50,7 @@ class AddressServices{
 
 
   static Future<AddressModel?> addAddressItem(String userId, String name, String city, String street) async {
-    // تأكد من أن الجسم يحتوي على البيانات المطلوبة
+
     var requestBody = {
       'userId': userId,
       'name': name,
@@ -65,7 +65,7 @@ class AddressServices{
       headers: {
         'Content-Type': 'application/json',
       },
-      body: jsonEncode(requestBody), // استخدام الجسم المعدل
+      body: jsonEncode(requestBody),
     );
 
     if (response.statusCode == 200) {
@@ -86,7 +86,7 @@ class AddressServices{
       },
     );
 
-    print("Response status: ${response.statusCode}, body: ${response.body}"); // طباعة الحالة والرد
+    print("Response status: ${response.statusCode}, body: ${response.body}");
 
     if (response.statusCode == 200) {
       var responseData = jsonDecode(response.body);

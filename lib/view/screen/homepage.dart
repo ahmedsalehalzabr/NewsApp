@@ -5,10 +5,8 @@ import 'package:posts/controller/product_controller.dart';
 import 'package:posts/core/constant/routes.dart';
 import 'package:posts/linkapi.dart';
 import 'package:posts/view/screen/widget/drawer.dart';
-import 'package:posts/view/screen/widget/home/customappbar.dart';
 import 'package:posts/view/screen/widget/home/customerproduct.dart';
 import 'package:posts/view/screen/widget/home/customtitlehome.dart';
-import 'package:posts/view/screen/widget/home/listcategoryhome.dart';
 import 'package:posts/view/screen/widget/item/customsladeritem.dart';
 
 import 'package:get/get.dart';
@@ -46,16 +44,21 @@ class HomePage extends StatelessWidget {
                     );
                   },
                 ),
-                title: IconButton(
-                  onPressed: () {
-                    Get.offNamed(AppRoute.categorypage);
-                  },
-                  icon: Image.asset(
-                    'assets/images/logo.png',
-                    width: 40,
-                    height: 40,
+                title: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Get.offNamed(AppRoute.categorypage);
+                      },
+                      icon: Image.asset(
+                        'assets/images/logo.png',
+                        width: 40,
+                        height: 40,
 
-                  ),
+                      ),
+                    ),
+
+                  ],
                 ),
                 actions: [
                   IconButton(

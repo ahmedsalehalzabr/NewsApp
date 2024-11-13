@@ -29,5 +29,4 @@ class _AuthEndPoints {
   final String orderId = 'Order/Id/';
   final String rating = 'Rating';
 
-
 }

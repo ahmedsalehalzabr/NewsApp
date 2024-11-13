@@ -23,13 +23,13 @@ class Language extends GetView<LocaleController> {
                   textbutton: "Ar",
                   onPressed: () {
                     controller.changeLang("ar");
-                    Get.toNamed(AppRoute.onBoarding) ; 
+                    Get.toNamed(AppRoute.homepage) ;
                   }),
               CustomButtonLang(
                   textbutton: "En",
                   onPressed: () {
                     controller.changeLang("en");
-                    Get.toNamed(AppRoute.onBoarding) ; 
+                    Get.toNamed(AppRoute.homepage) ;
                   }),
             ],
           )),

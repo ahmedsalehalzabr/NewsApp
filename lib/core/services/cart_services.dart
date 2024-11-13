@@ -34,7 +34,7 @@ class CartServices{
 
   static Future<List<CartModel>?> getCartByUserId(String userId) async{
 
-    var response = await client.get(Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.cartBy + "$userId"));
+    var response = await client.get(Uri.parse("${ApiEndPoints.baseUrl}${ApiEndPoints.authEndpoints.cartBy}$userId"));
     if(response.statusCode == 200)
     {
       var convertedJosnData = jsonDecode(response.body);
