@@ -8,9 +8,7 @@ import 'package:posts/view/screen/widget/drawer.dart';
 import 'package:posts/view/screen/widget/home/customerproduct.dart';
 import 'package:posts/view/screen/widget/home/customtitlehome.dart';
 import 'package:posts/view/screen/widget/item/customsladeritem.dart';
-
 import 'package:get/get.dart';
-
 import 'search_screen.dart';
 import 'widget/home/SearchFormText.dart';
 
@@ -57,7 +55,18 @@ class HomePage extends StatelessWidget {
 
                       ),
                     ),
+                    SizedBox(width:10),
+                    IconButton(
+                      onPressed: () {
+                        Get.offNamed(AppRoute.vvv);
+                      },
+                      icon: Image.asset(
+                        'assets/images/logo.png',
+                        width: 20,
+                        height: 20,
 
+                      ),
+                    ),
                   ],
                 ),
                 actions: [
@@ -91,11 +100,9 @@ class HomePage extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 1,
                   ),
-
-
                   // Obx(
                   //       () => Center(
                   //     child: Badge(
@@ -163,11 +170,9 @@ class HomePage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           );
-
                         },
                       ),
                     ),
-
                   //  CustomTitleHome(
                   //   title: "39".tr,
                   // ),

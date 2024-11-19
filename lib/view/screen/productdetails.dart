@@ -1,16 +1,13 @@
 
 import 'dart:core';
 import 'package:flutter/material.dart';
-
 import 'package:posts/core/constant/color.dart';
 import 'package:posts/core/constant/routes.dart';
 import 'package:posts/core/functions/translateDatabase.dart';
-
 import 'package:get/get.dart';
 import 'package:posts/view/screen/widget/item/customtitildetails.dart';
 import 'package:posts/view/screen/widget/product_details/priceandcont.dart';
 import 'package:readmore/readmore.dart';
-
 import 'widget/item/customsladeritem.dart';
 
 

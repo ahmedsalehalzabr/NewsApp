@@ -14,6 +14,7 @@ List<GetPage<dynamic>>? routes = [
   ]),
 
   GetPage(name: AppRoute.homepage, page: () => const HomeScreen()),
+  GetPage(name: AppRoute.vvv, page: () => const Language()),
 
   GetPage(name: AppRoute.searchScreen, page: () =>  SearchScreen()),
   GetPage(name: AppRoute.categorypage, page: () =>  CategoryPage()),

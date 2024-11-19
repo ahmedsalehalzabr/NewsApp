@@ -1,12 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-
 import 'package:posts/controller/homescreen_controller.dart';
 import 'package:posts/core/constant/color.dart';
-import 'package:posts/core/constant/routes.dart';
-import 'package:posts/view/screen/search_screen.dart';
-
 import 'package:get/get.dart';
 import 'package:posts/view/screen/widget/home/customappbarhomescreen.dart';
 
@@ -79,8 +74,7 @@ class HomeScreen extends StatelessWidget {
                   buttonColor: AppColor.thirdColor,
                 onConfirm: (){
                 exit(0);
-                     }
-
+                }
               );
               return Future.value(false);
             },
