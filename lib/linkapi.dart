@@ -9,6 +9,7 @@ class AppLink {
 }
 class ApiEndPoints {
   static final String baseUrl = 'https://10.0.2.2:7055/api/';
+  static final String fuck = 'https://api.openweathermap.org/data/2.5/forecast?appid=18487de2da863a0aa945a09e42a89e8f&q=sanaa';
   static _AuthEndPoints authEndpoints = _AuthEndPoints();
   static const String test = "https://api-magazine.investinyemen.org/ar/api/v1/single-category/11";
 }

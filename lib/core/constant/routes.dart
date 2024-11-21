@@ -22,5 +22,5 @@ class AppRoute {
   static const String categorypage = "/categorypage";
   static const String vvv = "/language";
 
-//  static const String offers = "/offers";
+
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:posts/controller/home_controller.dart';
@@ -154,20 +155,34 @@ class HomePage extends StatelessWidget {
                               // });
                             }),
                         itemBuilder: (context, index, realIndex) {
-                          return Container(
+                          return  Container(
                             margin: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              image: controllers.productList.isNotEmpty &&
-                                  controllers.productList[0].postList != null &&
-                                  controllers.productList[0].postList!.isNotEmpty &&
-                                  index < controllers.productList[0].postList!.length
-                                  ? DecorationImage(
-                                image: NetworkImage(AppLink.signUp +
-                                    controllers.productList[0].postList![index].imageUrl.toString()),
-                                fit: BoxFit.fill,
-                              )
-                                  : null, // أو يمكنك إضافة صورة بديلة هنا
                               borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: controllers.productList.isNotEmpty &&
+                                controllers.productList[0].postList != null &&
+                                controllers.productList[0].postList!.isNotEmpty &&
+                                index < controllers.productList[0].postList!.length
+                                ? ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: AppLink.signUp +
+                                    controllers.productList[0].postList![index].imageUrl.toString(),
+                                fit: BoxFit.fill,
+                                placeholder: (context, url) => Container(
+                                  color: Colors.grey[300], // اللون الخلفي أثناء التحميل
+                                  child: const Center(child: CircularProgressIndicator()),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.grey[300], // اللون الخلفي عند حدوث خطأ
+                                  child: const Icon(Icons.error),
+                                ),
+                              ),
+                            )
+                                : Container(
+                              color: Colors.grey[300], // اللون الخلفي في حال عدم وجود صورة
+                              child: const Icon(Icons.error),
                             ),
                           );
                         },
