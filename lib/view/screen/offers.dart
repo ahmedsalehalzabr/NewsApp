@@ -1,18 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:posts/controller/product_controller.dart';
 import 'package:posts/controller/productdetails_controller.dart';
 import 'package:posts/core/constant/color.dart';
-import 'package:posts/core/functions/translateDatabase.dart';
 import 'package:get/get.dart';
 
 class Offers extends StatelessWidget {
   const Offers({super.key});
-
   @override
   Widget build(BuildContext context) {
+
     Catalog2Controller controller = Get.put(Catalog2Controller());
-    // ProductControllersImp controller = Get.put(ProductControllersImp());
     return Scaffold(
       appBar: AppBar(
         title: Text("Offers"),
@@ -21,11 +18,12 @@ class Offers extends StatelessWidget {
         if (controller.cgModel == null) {
           return Center(
               child:
-                  CircularProgressIndicator()); // إذا كانت البيانات غير محملة بعد
+                  CircularProgressIndicator());
+
         }
 
         return ListView.builder(
-          itemCount: 5, // أو controller.cgModel?.list?.length
+          itemCount: controller.cgModel?.list?.length,
           itemBuilder: (context, index) {
             var weather = controller.cgModel?.list?[index];
             var temp = weather?.main?.temp?.toString() ??
@@ -51,7 +49,7 @@ class Offers extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
-                        Text(temp, // عرض القيمة هنا
+                        Text("Temp: ${temp}", // عرض القيمة هنا
                             style: TextStyle(
                                 color: AppColor.black,
                                 fontSize: 16,
@@ -59,9 +57,9 @@ class Offers extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                                weather?.main?.tempMin?.toString() ??
-                                    "غير متوفر",
+                            Text( "TempMin: ${weather?.main?.tempMin?.toString() ??
+            "غير متوفر"}",
+
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: AppColor.primaryColor,
@@ -88,7 +86,7 @@ class Offers extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                                "${weather?.main?.tempMax?.toString() ?? "غير متوفر"}",
+                                "TempMax: ${weather?.main?.tempMax?.toString() ?? "غير متوفر"}",
                                 style: TextStyle(
                                     color: AppColor.primaryColor,
                                     fontSize: 16,
@@ -98,12 +96,6 @@ class Offers extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // if (temp != "البيانات غير متوفرة")  // فقط إذا كانت البيانات متوفرة
-                  //   Positioned(
-                  //     top: 4,
-                  //     left: 4,
-                  //     child: Image.asset("assets/images/onesale.png", width: 40),
-                  //   ),
                 ],
               ),
             );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:posts/view/screen/favorite_screen.dart';
 import 'package:posts/view/screen/homepage.dart';
 import 'package:posts/view/screen/offers.dart';
 import 'package:posts/view/screen/settings.dart';
@@ -15,14 +16,14 @@ class HomeScreenControllerImp extends HomeScreenController {
     const HomePage(),
     const Settings(),
     const Offers(),
-    Text("favorate")
+    const FavoriteScreen()
   ];
 
   List  titlebottomappbar = [
     "Home" ,
     "Settings" ,
     "Offers" ,
-    "Favorite"
+    "Weather"
   ] ;
 
 
@@ -30,7 +31,7 @@ class HomeScreenControllerImp extends HomeScreenController {
     Icons.home,
     Icons.settings,
     Icons.local_offer,
-    Icons.favorite
+    Icons.accessible_sharp
   ];
   @override
   changePage(int i) {

@@ -32,6 +32,7 @@ class CityModel {
   }
 }
 
+
 class WeatherList {
   int? dt;
   Main? main;
@@ -66,7 +67,7 @@ class WeatherList {
     clouds = json['clouds'] != null ? Clouds.fromJson(json['clouds']) : null;
     wind = json['wind'] != null ? Wind.fromJson(json['wind']) : null;
     visibility = json['visibility'];
-    pop = json['pop']?.toDouble();
+    pop = (json['pop'] is int) ? (json['pop'] as int).toDouble() : json['pop'];
     sys = json['sys'] != null ? Sys.fromJson(json['sys']) : null;
     dtTxt = json['dt_txt'];
     rain = json['rain'] != null ? Rain.fromJson(json['rain']) : null;
@@ -99,6 +100,7 @@ class WeatherList {
     return data;
   }
 }
+
 
 
 class Main {
@@ -152,6 +154,7 @@ class Main {
 }
 
 
+
 class Weather {
   int? id;
   String? main;
@@ -201,19 +204,20 @@ class Wind {
   Wind({this.speed, this.deg, this.gust});
 
   Wind.fromJson(Map<String, dynamic> json) {
-    speed = json['speed'];
+    speed = (json['speed'] is int) ? (json['speed'] as int).toDouble() : json['speed'];
     deg = json['deg'];
-    gust = json['gust'];
+    gust = (json['gust'] is int) ? (json['gust'] as int).toDouble() : json['gust'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['speed'] = this.speed;
-    data['deg'] = this.deg;
-    data['gust'] = this.gust;
+    final Map<String, dynamic> data = {};
+    data['speed'] = speed;
+    data['deg'] = deg;
+    data['gust'] = gust;
     return data;
   }
 }
+
 
 class Sys {
   String? pod;
@@ -225,11 +229,12 @@ class Sys {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['pod'] = this.pod;
+    final Map<String, dynamic> data = {};
+    data['pod'] = pod;
     return data;
   }
 }
+
 
 class Rain {
   double? d3h;
@@ -237,15 +242,16 @@ class Rain {
   Rain({this.d3h});
 
   Rain.fromJson(Map<String, dynamic> json) {
-    d3h = json['3h'];
+    d3h = (json['3h'] is int) ? (json['3h'] as int).toDouble() : json['3h'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['3h'] = this.d3h;
+    final Map<String, dynamic> data = {};
+    data['3h'] = d3h;
     return data;
   }
 }
+
 
 class City {
   int? id;
@@ -257,20 +263,21 @@ class City {
   int? sunrise;
   int? sunset;
 
-  City(
-      {this.id,
-        this.name,
-        this.coord,
-        this.country,
-        this.population,
-        this.timezone,
-        this.sunrise,
-        this.sunset});
+  City({
+    this.id,
+    this.name,
+    this.coord,
+    this.country,
+    this.population,
+    this.timezone,
+    this.sunrise,
+    this.sunset,
+  });
 
   City.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    coord = json['coord'] != null ? new Coord.fromJson(json['coord']) : null;
+    coord = json['coord'] != null ? Coord.fromJson(json['coord']) : null;
     country = json['country'];
     population = json['population'];
     timezone = json['timezone'];
@@ -279,20 +286,21 @@ class City {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    if (this.coord != null) {
-      data['coord'] = this.coord!.toJson();
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['name'] = name;
+    if (coord != null) {
+      data['coord'] = coord!.toJson();
     }
-    data['country'] = this.country;
-    data['population'] = this.population;
-    data['timezone'] = this.timezone;
-    data['sunrise'] = this.sunrise;
-    data['sunset'] = this.sunset;
+    data['country'] = country;
+    data['population'] = population;
+    data['timezone'] = timezone;
+    data['sunrise'] = sunrise;
+    data['sunset'] = sunset;
     return data;
   }
 }
+
 
 class Coord {
   double? lat;
@@ -301,8 +309,8 @@ class Coord {
   Coord({this.lat, this.lon});
 
   Coord.fromJson(Map<String, dynamic> json) {
-    lat = json['lat'];
-    lon = json['lon'];
+    lat = (json['lat'] is int) ? (json['lat'] as int).toDouble() : json['lat'];
+    lon = (json['lon'] is int) ? (json['lon'] as int).toDouble() : json['lon'];
   }
 
   Map<String, dynamic> toJson() {
@@ -312,3 +320,6 @@ class Coord {
     return data;
   }
 }
+
+
+

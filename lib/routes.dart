@@ -1,4 +1,5 @@
 
+import 'package:posts/view/screen/favorite_screen.dart';
 import 'package:posts/view/screen/homescreen.dart';
 import 'package:posts/view/screen/language.dart';
 import 'package:posts/view/screen/search_screen.dart';
@@ -18,6 +19,7 @@ List<GetPage<dynamic>>? routes = [
 
   GetPage(name: AppRoute.searchScreen, page: () =>  SearchScreen()),
   GetPage(name: AppRoute.categorypage, page: () =>  CategoryPage()),
+  GetPage(name: AppRoute.favoriteScreen, page: () =>  const FavoriteScreen()),
 
 ];
 
