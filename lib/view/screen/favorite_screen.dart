@@ -16,7 +16,7 @@ class FavoriteScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Favorite Screen"),
+        title: Center(child: Text("Pagination Screen")),
       ),
       body: GetBuilder<Catalog2Controller>(builder: (controller) {
         if (controller.cgModel == null) {
@@ -81,20 +81,6 @@ class FavoriteScreen extends StatelessWidget {
                                     color: AppColor.primaryColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.bottomCenter,
-                                  height: 22,
-                                  child: Row(
-                                    children: List.generate(
-                                      5,
-                                          (index) => Icon(
-                                        Icons.star,
-                                        size: 15,
-                                        color: Colors.amberAccent,
-                                      ),
-                                    ),
                                   ),
                                 ),
                               ],

@@ -12,14 +12,13 @@ class Offers extends StatelessWidget {
     Catalog2Controller controller = Get.put(Catalog2Controller());
     return Scaffold(
       appBar: AppBar(
-        title: Text("Offers"),
+        title: Center(child: Text("Weather")),
       ),
       body: GetBuilder<Catalog2Controller>(builder: (controller) {
         if (controller.cgModel == null) {
           return Center(
               child:
                   CircularProgressIndicator());
-
         }
 
         return ListView.builder(
@@ -54,6 +53,16 @@ class Offers extends StatelessWidget {
                                 color: AppColor.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold)),
+                        Text("City: ${controller.cgModel?.city?.name.toString()}", // عرض القيمة هنا
+                            style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold)),
+                        Text("Country: ${controller.cgModel?.city?.country.toString()}", // عرض القيمة هنا
+                            style: TextStyle(
+                                color: AppColor.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold)),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -65,21 +74,16 @@ class Offers extends StatelessWidget {
                                     color: AppColor.primaryColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold)),
-                            Container(
-                              alignment: Alignment.bottomCenter,
-                              height: 22,
-                              child: Row(
-                                children: [
-                                  ...List.generate(
-                                      5,
-                                      (index) => Icon(
-                                            Icons.star,
-                                            size: 15,
-                                            color: Colors.amberAccent,
-                                          )),
-                                ],
-                              ),
-                            ),
+                            Text( "DateTime: ${weather?.dtTxt?.toString() ??
+                                "غير متوفر"}",
+
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: AppColor.primaryColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold)),
+
+
                           ],
                         ),
                         Row(
@@ -91,6 +95,24 @@ class Offers extends StatelessWidget {
                                     color: AppColor.primaryColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold)),
+                            Text(
+                              "Clouds: ${weather?.clouds?.all.toString() ?? "غير متوفر"}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppColor.primaryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "Wind Speed: ${weather?.wind?.speed.toString() ?? "غير متوفر"}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: AppColor.primaryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
                       ],
