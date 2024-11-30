@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -71,13 +70,37 @@ class ProductControllerImp extends ProductController {
     addSearchToList("");
   }
 
-  void getProducts() async {
-    var product = await ProductServices.getProduct();
+  Future<void> clearCache() async {
+    var prefs = await sharedPreferences;
+    await prefs.remove('cached_products');
+    productList.clear();
+    await getProducts(); // Fetch fresh data
+  }
 
+  getProducts() async {
     try {
       isLoading(true);
-      if (product!.isNotEmpty) {
-        productList.addAll(product);
+      
+      // First try to load from cache
+      var prefs = await sharedPreferences;
+      var cachedData = prefs.getStringList('cached_products');
+      
+      if (cachedData != null && cachedData.isNotEmpty) {
+        productList.value = cachedData
+            .map((e) => ProductModel.fromJson(json.decode(e)))
+            .toList();
+      }
+      
+      // Then fetch fresh data from network
+      var product = await ProductServices.getProduct();
+      if (product != null && product.isNotEmpty) {
+        productList.value = product;
+        
+        // Cache the new data
+        var productsJson = product
+            .map((item) => json.encode(item.toJson()))
+            .toList();
+        await prefs.setStringList('cached_products', productsJson);
       }
     } finally {
       isLoading(false);

@@ -1,6 +1,3 @@
-
-
-
 import 'package:awesome_rating/awesome_rating.dart';
 
 import 'package:flutter/material.dart';
@@ -14,9 +11,10 @@ class SearchScreen extends StatelessWidget {
   SearchScreen({
     Key? key,
   }) : super(key: key);
-  ProductControllerImp controller =    Get.put(ProductControllerImp());
+  ProductControllerImp controller = Get.put(ProductControllerImp());
 
  // final cartController = Get.find<CartController>();
+
 
 
 
@@ -137,18 +135,23 @@ class SearchScreen extends StatelessWidget {
                     () => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        controller.manageFavourites(catalogId);
-                      },
-                      icon: controller.isFavourites(catalogId)
-                          ? const Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      )
-                          :  Icon(
-                        Icons.favorite_outline,
-                        color:Get.isDarkMode ? Colors.white : Colors.black,
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.only(right: 5),
+                        child: IconButton(
+                          onPressed: () {
+                            controller.manageFavourites(catalogId);
+                          },
+                          icon: controller.isFavourites(catalogId)
+                              ? const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          )
+                              : Icon(
+                            Icons.favorite_outline,
+                            color: Get.isDarkMode ? Colors.white : Colors.black,
+                          ),
+                        ),
                       ),
                     ),
                     // IconButton(

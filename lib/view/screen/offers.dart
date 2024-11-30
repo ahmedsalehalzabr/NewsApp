@@ -8,122 +8,157 @@ class Offers extends StatelessWidget {
   const Offers({super.key});
   @override
   Widget build(BuildContext context) {
-
     Catalog2Controller controller = Get.put(Catalog2Controller());
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("Weather")),
+        centerTitle: true,
+        title: const Text(
+          "Weather Forecast",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        elevation: 0,
       ),
-      body: GetBuilder<Catalog2Controller>(builder: (controller) {
-        if (controller.cgModel == null) {
-          return Center(
-              child:
-                  CircularProgressIndicator());
-        }
-
-        return ListView.builder(
-          itemCount: controller.cgModel?.list?.length,
-          itemBuilder: (context, index) {
-            var weather = controller.cgModel?.list?[index];
-            var temp = weather?.main?.temp?.toString() ??
-                "البيانات غير متوفرة"; // تعديل هنا
-
-            return Card(
-              child: Stack(
+      body: GetBuilder<Catalog2Controller>(
+        builder: (controller) {
+          if (controller.cgModel == null) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text("جاري تحميل بيانات الطقس...",
+                      style: TextStyle(fontSize: 16)),
+                ],
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: controller.cgModel?.list?.length ?? 0,
+            itemBuilder: (context, index) {
+              var weather = controller.cgModel?.list?[index];
+              var temp = weather?.main?.temp?.toStringAsFixed(1) ?? "غير متوفر";
+              var weatherIcon = weather?.weather?.first.icon ?? "03d";
+
+              return Card(
+                elevation: 4,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    gradient: const LinearGradient(
+                      colors: [Colors.blue, Colors.lightBlue],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                "https://openweathermap.org/img/wn/03d@2x.png",
-                            height: 200,
-                            fit: BoxFit.fill,
-                            color: Colors.black,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${controller.cgModel?.city?.name ?? 'غير متوفر'}, ${controller.cgModel?.city?.country ?? ''}",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "درجة الحرارة: $temp°C",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            CachedNetworkImage(
+                              imageUrl: "https://openweathermap.org/img/wn/$weatherIcon@2x.png",
+                              height: 80,
+                              width: 80,
+                              fit: BoxFit.contain,
+                              placeholder: (context, url) => const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                            ),
+                          ],
+                        ),
+                        const Divider(color: Colors.white30, height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            _buildWeatherInfo(
+                              "الحد الأدنى",
+                              "${weather?.main?.tempMin?.toStringAsFixed(1) ?? 'غير متوفر'}°C",
+                              Icons.arrow_downward,
+                            ),
+                            _buildWeatherInfo(
+                              "الحد الأقصى",
+                              "${weather?.main?.tempMax?.toStringAsFixed(1) ?? 'غير متوفر'}°C",
+                              Icons.arrow_upward,
+                            ),
+                            _buildWeatherInfo(
+                              "الغيوم",
+                              "${weather?.clouds?.all ?? 'غير متوفر'}%",
+                              Icons.cloud,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "التاريخ: ${weather?.dtTxt?.toString() ?? 'غير متوفر'}",
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Text("Temp: ${temp}", // عرض القيمة هنا
-                            style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Text("City: ${controller.cgModel?.city?.name.toString()}", // عرض القيمة هنا
-                            style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Text("Country: ${controller.cgModel?.city?.country.toString()}", // عرض القيمة هنا
-                            style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text( "TempMin: ${weather?.main?.tempMin?.toString() ??
-            "غير متوفر"}",
-
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: AppColor.primaryColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold)),
-                            Text( "DateTime: ${weather?.dtTxt?.toString() ??
-                                "غير متوفر"}",
-
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: AppColor.primaryColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold)),
-
-
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                                "TempMax: ${weather?.main?.tempMax?.toString() ?? "غير متوفر"}",
-                                style: TextStyle(
-                                    color: AppColor.primaryColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold)),
-                            Text(
-                              "Clouds: ${weather?.clouds?.all.toString() ?? "غير متوفر"}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: AppColor.primaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              "Wind Speed: ${weather?.wind?.speed.toString() ?? "غير متوفر"}",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: AppColor.primaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            );
-          },
-        );
-      }),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildWeatherInfo(String label, String value, IconData icon) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.white, size: 24),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }
