@@ -13,209 +13,193 @@ class SearchScreen extends StatelessWidget {
   }) : super(key: key);
   ProductControllerImp controller = Get.put(ProductControllerImp());
 
- // final cartController = Get.find<CartController>();
-
-
-
-
-
-  //final List<CatalogModels> list;
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) {
-        return Expanded(
-          child: Container(),
-        );
-      } else {
-        return Expanded(
-          child: controller.searchList.isEmpty &&
-              controller.searchTextController.text.isNotEmpty
-              ? Get.isDarkMode
-              ? Image.asset("assets/images/search.webp")
-              : Image.asset("assets/images/search.webp")
-              : GridView.builder(
-            itemCount: controller.searchList.isEmpty
-                ? controller.productList.length ?? 0
-                : controller.searchList.length,
-            gridDelegate:  SliverGridDelegateWithMaxCrossAxisExtent(
-              childAspectRatio: 2,
-              mainAxisSpacing: 3.0,
-              crossAxisSpacing: 2.0,
-              maxCrossAxisExtent: 200,
-              mainAxisExtent: 272,
-            ),
-            itemBuilder: (context, index) {
-            final  oo = controller.productList[index];
-              if (controller.searchList.isEmpty) {
-                return buildCardItems(
-                    image: controller.productList[index].postList![index].imageUrl.toString(),
-                    name: controller.productList[index].categoryTitle.toString(),
-                    platformId: controller.productList[index].id.toString(),
-                    regionId: controller.productList[index].categoryGroupName.toString(),
-                    catalogId: controller.productList[index].id.toString(),
-                    productModels: controller.productList[index],
-                    // catalogProductModels: controller2.catalogProductModels!.data.products[0],
-                    //  productModel: productController.productList[index],
-                    //  Id: productController.productList[index].catalogId.toString(),
-                    onTap: () {
-                      Get.to(() => ProductDetailsScreen(
-                        productModel: controller.productList[index],
-                        // id:cartController.cartList[0].items![index].id.toString(),
-                        // quantity:cartController.cartList[0].items![index].quantity ?? 0,
-                        // price:cartController.cartList[0].items![index].price ?? 0,
-                        //  catalogProductModels: controller2.catalogProductModels!.data.products[0],
-                        //  productModel:productController.productList[index]
-
-                      ));
-                    });
-              } else {
-                return buildCardItems(
-                    image: controller.searchList[index].postList![index].imageUrl.toString(),
-                    name: controller.searchList[index].categoryTitle.toString(),
-                    platformId: controller.searchList[index].id.toString(),
-                    regionId: controller.searchList[index].categoryGroupName.toString(),
-                    catalogId: controller.searchList[index].id.toString(),
-                    productModels: controller.searchList[index],
-                    // catalogProductModels: controller2.catalogProductModels!.data.products[index],
-                    //productModel: productController.productList[index],
-                    // Id: productController.productList[index].catalogId.toString(),
-                    onTap: () {
-                      Get.to(() => ProductDetailsScreen(
-                        productModel: controller.searchList[index],
-                        //  catalogProductModels: controller2.catalogProductModels!.data.products[index],
-                        // id:cartController.cartList[0].items![index].id.toString(),
-                        // quantity:cartController.cartList[0].items![index].quantity ?? 0,
-                        // price:cartController.cartList[0].items![index].price ?? 0,
-                        //   productModel:productController.productList[index]
-                      ));
-                    }
-                );
-              }
-
-            },
+        return const Expanded(
+          child: Center(
+            child: CircularProgressIndicator(),
           ),
         );
       }
+
+      if (controller.searchList.isEmpty && controller.searchTextController.text.isNotEmpty) {
+        return Expanded(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/search.webp",
+                  height: 200,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "No results found",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Get.isDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
+      List<PostList> allPosts = [];
+      
+      if (controller.searchList.isEmpty) {
+        // جمع كل المنشورات من productList
+        for (var product in controller.productList) {
+          if (product.postList != null) {
+            allPosts.addAll(product.postList!);
+          }
+        }
+      } else {
+        // جمع كل المنشورات من searchList
+        for (var product in controller.searchList) {
+          if (product.postList != null) {
+            allPosts.addAll(product.postList!);
+          }
+        }
+      }
+
+      return Expanded(
+        child: GridView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: allPosts.length,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            childAspectRatio: 0.7,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            maxCrossAxisExtent: 200,
+          ),
+          itemBuilder: (context, index) {
+            final post = allPosts[index];
+            
+            return buildCardItems(
+              image: post.imageUrl ?? '',
+              name: post.postTitle ?? '',
+              platformId: post.nid?.toString() ?? '',
+              regionId: post.categoryTitle ?? '',
+              catalogId: post.nid?.toString() ?? '',
+              productModels: controller.searchList.isEmpty 
+                ? controller.productList.first 
+                : controller.searchList.first,
+              onTap: () {
+                // تمرير المنتج الأساسي مع المنشور المحدد
+                final parentProduct = controller.searchList.isEmpty 
+                    ? controller.productList.firstWhere(
+                        (product) => product.postList?.any((p) => p.nid == post.nid) ?? false,
+                        orElse: () => controller.productList.first)
+                    : controller.searchList.firstWhere(
+                        (product) => product.postList?.any((p) => p.nid == post.nid) ?? false,
+                        orElse: () => controller.searchList.first);
+                        
+                Get.to(() => ProductDetailsScreen(
+                  productModel: parentProduct,
+                ));
+              },
+            );
+          },
+        ),
+      );
     });
   }
-
 
   Widget buildCardItems({
     required String image,
     required String name,
-    // required ProductModel productModel,
-    // required String Id,
     required String platformId,
     required String regionId,
     required String catalogId,
     required ProductModel productModels,
-    // required CatalogProductModels catalogProductModels,
     required Function() onTap,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(3),
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Get.isDarkMode ? Colors.black12 : Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1.0,
-                blurRadius: 2.0,
-              ),
-            ],
+            borderRadius: BorderRadius.circular(12),
+            color: Get.isDarkMode ? Colors.grey[900] : Colors.white,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Obx(
-                    () => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: EdgeInsets.only(right: 5),
-                        child: IconButton(
-                          onPressed: () {
-                            controller.manageFavourites(catalogId);
-                          },
-                          icon: controller.isFavourites(catalogId)
-                              ? const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          )
-                              : Icon(
-                            Icons.favorite_outline,
-                            color: Get.isDarkMode ? Colors.white : Colors.black,
-                          ),
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    child: Image.network(
+                      AppLink.signUp + image,
+                      height: 140,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 140,
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.error_outline),
+                        );
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white.withOpacity(0.9),
+                      radius: 18,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () => controller.manageFavourites(catalogId),
+                        icon: Icon(
+                          controller.isFavourites(catalogId)
+                              ? Icons.favorite
+                              : Icons.favorite_outline,
+                          color: controller.isFavourites(catalogId)
+                              ? Colors.red
+                              : Colors.grey,
+                          size: 20,
                         ),
                       ),
                     ),
-                    // IconButton(
-                    //   onPressed: () {
-                    //     cartController.addProductToCart(catalogModels);
-                    //   },
-                    //   icon: const Icon(
-                    //     Icons.shopping_cart_outlined,
-                    //     color: Colors.black,
-                    //   ),
-                    // ),
-                    Text(
-                      regionId,style: TextStyle(
-                      color:  Get.isDarkMode ? Colors.white : Colors.black,
-                    ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 145,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10), // لاحتواء الصورة ضمن الحواف المدورة
-                  child: Image.network(
-                    AppLink.signUp + image,
-                    fit: BoxFit.fill, // ضبط حجم الصورة لتناسب الحاوية
                   ),
-                ),
+                ],
               ),
               Padding(
-                padding: const EdgeInsets.only(right: 10, left: 10, top: 10),
+                padding: const EdgeInsets.all(12),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "$name",
-                      style:  TextStyle(
+                      name,
+                      style: TextStyle(
                         color: Get.isDarkMode ? Colors.white : Colors.black,
                         fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(
-                    //     right: 3,
-                    //   ),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.start,
-                    //     children: [
-                    //       const  AwesomeStarRating(
-                    //
-                    //         color: Colors.orange,
-                    //         borderColor: Colors.orange,
-                    //         starCount: 5,
-                    //         spacing: 1,
-                    //         size: 12,
-                    //         allowHalfRating: true,
-                    //
-                    //       ),
-                    //
-                    //     ],
-                    //   ),
-                    // ),
+                    const SizedBox(height: 8),
+                    Text(
+                      regionId,
+                      style: TextStyle(
+                        color: Get.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                        fontSize: 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
                 ),
               ),
