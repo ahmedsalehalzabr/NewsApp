@@ -21,126 +21,96 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Center(child: Text('Menu')),
-              const SizedBox(width: 100),
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: Icon(
-                    Icons.close_rounded,
-                    color: Get.isDarkMode ? Colors.red : Colors.purple,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const Divider(thickness: 1),
-          const SizedBox(height: 5),
-          Column(
-            children: controller.categoryList.isNotEmpty
-                ? controller.categoryList.map((category) {
-              return _listTiles(
-                label: category.categoryQroupTitle.toString(),
-                fct: () {
-                  _entertainments(context, category.categoryQroupTitle.toString());
-                },
-                icon: Icons.arrow_right,
-              );
-            }).toList()
-                : [const SizedBox()],
-          ),
-          const Divider(thickness: 1),
-        ],
-      ),
-    );
-  }
-
-  void _entertainments(BuildContext context, String id) {
-    // استدعاء دالة fetchCategoryId لجلب البيانات
-    controller2.fetchCategoryId(id);
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  ' $id',
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: const Icon(
-                  Icons.close_rounded,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: Obx(() {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      height: 200,
-                      child: ListView.builder(
-                        controller: _scrollController,
-                        itemCount: controller.categoryList.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, categoryIndex) {
-                          final category = controller.categoryList[categoryIndex];
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                category.categoryQroupTitle.toString(),
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              ListView.builder(
-                                itemCount: category.categoryList!.length,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  final subItem = category.categoryList![index];
-                                  return buildCardItems2(
-                                    name: subItem.categoryTitle.toString(),
-                                    category1001Model: category,
-                                    onTap: () {
-                                      // تنفيذ أي إجراء عند النقر بناءً على الـ ID
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+            decoration: BoxDecoration(
+              color: Get.isDarkMode ? Colors.grey[800] : Colors.purple.shade50,
+            ),
+            child: SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'القائمة',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Get.isDarkMode ? Colors.white : Colors.purple,
                     ),
-                  ],
-                ),
-              );
+                  ),
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: Icon(
+                      Icons.close_rounded,
+                      color: Get.isDarkMode ? Colors.red : Colors.purple,
+                      size: 28,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Obx(() {
+              return controller.categoryList.isEmpty
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Get.isDarkMode ? Colors.red : Colors.purple,
+                      ),
+                    )
+                  : ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      itemCount: controller.categoryList.length,
+                      itemBuilder: (context, categoryIndex) {
+                        final category = controller.categoryList[categoryIndex];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (categoryIndex > 0) const SizedBox(height: 20),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: Get.isDarkMode ? Colors.grey[800] : Colors.purple.shade50,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                category.categoryQroupTitle.toString(),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Get.isDarkMode ? Colors.white : Colors.purple,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: category.categoryList?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                final subItem = category.categoryList![index];
+                                return buildCardItems2(
+                                  name: subItem.categoryTitle.toString(),
+                                  category1001Model: category,
+                                  onTap: () {
+                                    controller2.fetchCategoryId(subItem.id.toString());
+                                    Get.back();
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
             }),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 
@@ -151,15 +121,30 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }) {
     return InkWell(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 5),
-        child: Text(
-          name,
-          style: TextStyle(
-            fontSize: 17,
-            color: Get.isDarkMode ? Colors.white : Colors.black,
-            height: 2.5,
-          ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: const EdgeInsets.only(bottom: 5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Get.isDarkMode ? Colors.grey[900] : Colors.white,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                name,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Get.isDarkMode ? Colors.white70 : Colors.black87,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Get.isDarkMode ? Colors.white54 : Colors.black54,
+            ),
+          ],
         ),
       ),
     );
@@ -188,4 +173,3 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     );
   }
 }
-

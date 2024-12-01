@@ -104,8 +104,9 @@ class HomePage extends StatelessWidget {
       child: Column(
         children: [
           CarouselSlider.builder(
-            itemCount: min(3, controllers.productList.isEmpty ? 0 :
-            controllers.productList[0].postList?.length ?? 0),
+            itemCount: controllers.productList.isEmpty 
+              ? 0 
+              : controllers.productList[0].postList?.length ?? 0,
             carouselController: carouselController,
             options: CarouselOptions(
               height: 200,
@@ -121,17 +122,9 @@ class HomePage extends StatelessWidget {
               },
             ),
             itemBuilder: (context, index, realIndex) {
-              return _buildCarouselItem(controllers, index);
-            },
-          ),
-          SizedBox(height: 8),
-          ValueListenableBuilder<int>(
-            valueListenable: currentPage,
-            builder: (context, value, child) {
-              return _buildCarouselIndicator(
-                controllers,
-                value,
-                context,
+              return Container(
+                width: double.infinity,
+                child: _buildCarouselItem(controllers, index),
               );
             },
           ),
@@ -190,37 +183,6 @@ class HomePage extends StatelessWidget {
           Icons.error_outline,
           size: 40,
           color: Colors.grey,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCarouselIndicator(
-      ProductControllerImp controllers,
-      int currentPage,
-      BuildContext context,
-      ) {
-    int itemCount = min(
-      3,
-      controllers.productList.isEmpty
-          ? 0
-          : controllers.productList[0].postList?.length ?? 0,
-    );
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        itemCount,
-            (index) => Container(
-          width: 8,
-          height: 8,
-          margin: EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: currentPage == index
-                ? Theme.of(context).primaryColor
-                : Colors.grey.withOpacity(0.5),
-          ),
         ),
       ),
     );
