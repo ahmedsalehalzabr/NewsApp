@@ -18,13 +18,27 @@ class CustomButtonAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: onPressed,
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Icon(icondata,
-            color: active == true ? AppColor.primaryColor : AppColor.grey2),
-        Text(textbutton,
+      padding: EdgeInsets.zero,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icondata,
+            color: active == true ? AppColor.primaryColor : AppColor.grey2,
+            size: 24,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            textbutton,
             style: TextStyle(
-                color: active == true ? AppColor.primaryColor : AppColor.grey2))
-      ]),
+              color: active == true ? AppColor.primaryColor : AppColor.grey2,
+              fontSize: 12,
+            ),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
     );
   }
 }

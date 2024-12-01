@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:posts/controller/category_lang_controller.dart';
+import 'package:posts/core/constant/routes.dart';
 
 
 class CategoryPage extends StatelessWidget {
@@ -20,6 +21,10 @@ class CategoryPage extends StatelessWidget {
                   : 'ar';
               controller.changeLanguage(newLang);
             },
+          ),
+          IconButton(
+              onPressed: (){Get.offNamed(AppRoute.homepage);},
+              icon: Icon(Icons.home),
           ),
         ],
       ),
