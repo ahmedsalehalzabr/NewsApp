@@ -82,18 +82,17 @@ class _DetailsTitleState extends State<DetailsTitle> {
            //   ),
             ],
           ),
-          Row(
+          Column(
             children: [
+              Text(
+                widget.shortDescription,
 
-               AwesomeStarRating(
-
-                color: Colors.orange,
-                borderColor: Colors.orange,
-                starCount: 5,
-                spacing: 1,
-                size: 20,
-                allowHalfRating: true,
-
+                //  overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Get.isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
             ],
           ),

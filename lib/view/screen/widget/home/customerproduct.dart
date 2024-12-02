@@ -8,6 +8,7 @@ import 'package:posts/core/functions/translateDatabase.dart';
 import 'package:posts/linkapi.dart';
 import 'package:posts/models/product_model.dart';
 import 'package:html/parser.dart' show parse;
+import 'package:posts/view/screen/product_details_screen.dart';
 
 class ListProductHome extends StatelessWidget {
   ListProductHome({Key? key}) : super(key: key);
@@ -65,8 +66,23 @@ class ListProductHome extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: InkWell(
-                    onTap: () {
-                      // يمكن إضافة التنقل إلى صفحة التفاصيل هنا
+                      onTap: () {
+                      // Get the parent product that contains the selected post
+                      final parentProduct = controller.searchList.isEmpty
+                          ? controller.productList[0]  // Use the first product since we know it contains our posts
+                          : controller.searchList[0];
+                          
+                      // Create a new ProductModel with only the selected post
+                      final selectedProduct = ProductModel(
+                        postList: [post],  // Pass only the clicked post
+                        // Copy other necessary fields from parent product
+                        id: parentProduct.id,
+                
+                      );
+
+                      Get.to(() => ProductDetailsScreen(
+                        productModel: selectedProduct,
+                      ));
                     },
                     borderRadius: BorderRadius.circular(8),
                     child: Container(
@@ -74,10 +90,23 @@ class ListProductHome extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            width: 90,  
-                            height: 130,
-                            child: _buildProductImage(post.imageUrl.toString()),
+                          Expanded(
+                            flex: 1,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                imageUrl: "${AppLink.signUp}/${post.imageUrl}",
+                                fit: BoxFit.cover,
+                                height: 120,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) => const Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
                           ),
                           const SizedBox(width: 8),  
                           Expanded(
@@ -96,31 +125,41 @@ class ListProductHome extends StatelessWidget {
     });
   }
 
-  Widget _buildProductImage(String imageUrl) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: CachedNetworkImage(
-        imageUrl: AppLink.signUp + imageUrl,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Container(
-          color: Colors.grey[200],
-          child: Center(
-            child: Lottie.asset(
-              'assets/loading.json',
-              width: 40,
-              height: 40,
-            ),
+  Widget _buildProductDetails(PostList post) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          translateDatabase(
+            post.postTitle.toString(),
+            post.postTitle.toString(),
           ),
-        ),
-        errorWidget: (context, url, error) => Container(
-          color: Colors.grey[200],
-          child: const Icon(
-            Icons.error_outline,
-            color: Colors.grey,
-            size: 24,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
           ),
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
         ),
-      ),
+        // const SizedBox(height: 4),
+        // Flexible(
+        //   child: Text(
+        //     translateDatabase(
+        //       _cleanHtmlText(post.body?.toString()),
+        //       _cleanHtmlText(post.body?.toString()),
+        //     ),
+        //     style: TextStyle(
+        //       fontSize: 13,
+        //       color: Colors.grey[600],
+        //       height: 1.3,
+        //     ),
+        //     maxLines: 2,
+        //     overflow: TextOverflow.ellipsis,
+        //   ),
+        // ),
+      ],
     );
   }
 
@@ -140,44 +179,6 @@ class ListProductHome extends StatelessWidget {
     plainText = plainText.trim();
     
     return plainText;
-  }
-
-  Widget _buildProductDetails(PostList post) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          translateDatabase(
-            post.postTitle.toString(),
-            post.postTitle.toString(),
-          ),
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(height: 4),
-        Flexible(
-          child: Text(
-            translateDatabase(
-              _cleanHtmlText(post.body?.toString()),
-              _cleanHtmlText(post.body?.toString()),
-            ),
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.grey[600],
-              height: 1.3,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _buildInfoChip(IconData icon, String label) {

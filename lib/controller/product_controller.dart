@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:posts/core/services/product_services.dart';
 import 'package:posts/core/services/services.dart';
@@ -77,35 +77,84 @@ class ProductControllerImp extends ProductController {
     await getProducts(); // Fetch fresh data
   }
 
+
+
+
   getProducts() async {
     try {
       isLoading(true);
-      
-      // First try to load from cache
+
+      // تحميل البيانات من الكاش
       var prefs = await sharedPreferences;
       var cachedData = prefs.getStringList('cached_products');
-      
+
       if (cachedData != null && cachedData.isNotEmpty) {
         productList.value = cachedData
             .map((e) => ProductModel.fromJson(json.decode(e)))
             .toList();
       }
-      
-      // Then fetch fresh data from network
-      var product = await ProductServices.getProduct();
-      if (product != null && product.isNotEmpty) {
-        productList.value = product;
-        
-        // Cache the new data
-        var productsJson = product
-            .map((item) => json.encode(item.toJson()))
-            .toList();
-        await prefs.setStringList('cached_products', productsJson);
+
+      // التحقق من الاتصال بالشبكة
+      if (await _isConnectedToInternet()) {
+        // تحميل البيانات من الشبكة
+        var product = await ProductServices.getProduct();
+        if (product != null && product.isNotEmpty) {
+          productList.value = product;
+
+          // تخزين البيانات الجديدة في الكاش
+          var productsJson = product.map((item) => json.encode(item.toJson())).toList();
+          await prefs.setStringList('cached_products', productsJson);
+        }
+      } else {
+        print("No internet connection");
       }
+    } on SocketException catch (e) {
+      print("Network error: $e");
+    } catch (e) {
+      print("Unexpected error: $e");
     } finally {
       isLoading(false);
     }
   }
+
+  Future<bool> _isConnectedToInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // getProducts() async {
+  //   try {
+  //     isLoading(true);
+  //
+  //     // First try to load from cache
+  //     var prefs = await sharedPreferences;
+  //     var cachedData = prefs.getStringList('cached_products');
+  //
+  //     if (cachedData != null && cachedData.isNotEmpty) {
+  //       productList.value = cachedData
+  //           .map((e) => ProductModel.fromJson(json.decode(e)))
+  //           .toList();
+  //     }
+  //
+  //     // Then fetch fresh data from network
+  //     var product = await ProductServices.getProduct();
+  //     if (product != null && product.isNotEmpty) {
+  //       productList.value = product;
+  //
+  //       // Cache the new data
+  //       var productsJson = product
+  //           .map((item) => json.encode(item.toJson()))
+  //           .toList();
+  //       await prefs.setStringList('cached_products', productsJson);
+  //     }
+  //   } finally {
+  //     isLoading(false);
+  //   }
+  // }
 
   @override
   void onInit() async {
