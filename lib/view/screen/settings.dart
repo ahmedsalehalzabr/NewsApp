@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:posts/controller/settings_controller.dart';
 import 'package:posts/core/constant/color.dart';
-import 'package:posts/core/constant/imgaeasset.dart';
 import 'package:posts/core/constant/routes.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';

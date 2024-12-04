@@ -1,5 +1,3 @@
-import 'package:awesome_rating/awesome_rating.dart';
-
 import 'package:flutter/material.dart';
 import 'package:posts/controller/product_controller.dart';
 import 'package:posts/linkapi.dart';

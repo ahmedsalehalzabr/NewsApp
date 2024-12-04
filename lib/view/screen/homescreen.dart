@@ -15,51 +15,6 @@ class HomeScreen extends StatelessWidget {
     Get.put(HomeScreenControllerImp());
     return GetBuilder<HomeScreenControllerImp>(
         builder: (controller) => Scaffold(
-          // appBar: AppBar(
-          //   backgroundColor:  Colors.white,
-          //
-          //   actions: [
-          //     IconButton(
-          //       icon: Icon(
-          //         Icons.search,
-          //         color: AppColor.primaryColor,
-          //       ),
-          //       onPressed: () {
-          //         showModalBottomSheet(
-          //           context: context,
-          //           builder: (context) {
-          //             return SingleChildScrollView(
-          //               child: Container(
-          //                 height: 500,
-          //                 width: 500,
-          //                 child: Padding(
-          //                   padding: const EdgeInsets.all(5),
-          //                   child: Column(
-          //                     children: [
-          //
-          //                       SearchFormText(),
-          //                       SizedBox(height: 5),
-          //                       SearchScreen(),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //             );
-          //           },
-          //         );
-          //       },
-          //     ),
-          //     SizedBox(
-          //       width: 1,
-          //     ),
-          //
-          //   ],
-          // ),
-          // floatingActionButton: FloatingActionButton(
-          //     onPressed: () { Get.offAllNamed(AppRoute.cartScreen);},
-          //     child: const Icon(Icons.shopping_basket_outlined)),
-          // floatingActionButtonLocation:
-          // FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: const CustomBottomAppBarHome(),
           body: WillPopScope(
             child: controller.listPage.elementAt(controller.currentpage),
